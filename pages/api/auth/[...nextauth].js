@@ -5,14 +5,14 @@ import spotifyApi, { LOGIN_URL } from "../../../lib/spotify";
 async function refreshAccessToken(token) {
   try {
     spotifyApi.setAccessToken(token.accessToken);
-    apotifyApi.setRefreshToken(token.refreshToken);
+    spotifyApi.setRefreshToken(token.refreshToken);
 
-    const { body: refreshedToken } = await spotifyAPi.refreshAccessToken();
+    const { body: refreshedToken } = await spotifyApi.refreshAccessToken();
     console.log("REFRESHED TOKEN IS", refreshedToken);
 
     return {
       ...token,
-      accessToken: refreshedToken.access_accesstoken,
+      accessToken: refreshedToken.access_token,
       accessTokenExpires: Date.now() + refreshedToken.expires_in * 1000,
       // replace if new one came back else fall back to old refresh token
       refreshToken: refreshedToken.refresh_token ?? token.refreshToken,
@@ -64,7 +64,7 @@ export default NextAuth({
       
     },
 
-    async session ({ session, token }) {
+    async session({ session, token }) {
       session.user.accessToken = token.accessToken;
       session.user.refreshToken = token.refreshToken;
       session.user.username = token.username;
